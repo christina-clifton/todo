@@ -1,23 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import {Title} from './Title';
+import {Input} from './Input';
+import React, {useState} from 'react';
+import {CurrentList} from './CurrentList';
+
 
 function App() {
+
+  const [list, updateList] = useState([
+    {
+      name:'Groceries',
+      isCompleted: false,
+    },
+    {
+      name: 'laundry',
+      isCompleted: true,
+    }
+  ])
+
+  const [currentView, updateCurrentView] = useState(list);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Title />
+      <Input 
+        list={list} 
+        updateList={updateList}
+        currentView={currentView}
+        updateCurrentView={updateCurrentView}
+      />
+      <CurrentList 
+        list={list} 
+        updateList={updateList}
+        currentView={currentView}
+        updateCurrentView={updateCurrentView}
+      />
     </div>
   );
 }
