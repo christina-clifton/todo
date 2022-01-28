@@ -1,7 +1,7 @@
 import './App.css';
 import React, {useState} from 'react';
 
-export const Input = ({list, updateList, updateCurrentView}) => {
+export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
     const [value, updateValue] = useState('')
 
     const handleUpdateValue = (e) => {
@@ -17,8 +17,8 @@ export const Input = ({list, updateList, updateCurrentView}) => {
                     isCompleted: false,
                 }
             ]));
+            updateTodoCount(todoCount + 1);
             updateValue('');
-            updateCurrentView(list);
         }
     }
 
