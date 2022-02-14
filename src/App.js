@@ -1,9 +1,10 @@
+import React, {useState} from 'react';
 import './App.css';
+
 import {Title} from './Title';
 import {Input} from './Input';
-import React, {useState} from 'react';
 import {CurrentList} from './CurrentList';
-import {ToggleViewButtons} from './ToggleViewButtons';
+import {Footer} from './Footer';
 
 
 function App() {
@@ -14,8 +15,12 @@ function App() {
 
   const [todoCount, updateTodoCount] = useState(0);
 
+  function handleUpdateTodoCount() {
+    const todoList = list.filter((task) => !task.isCompleted);
+    updateTodoCount(todoList.length);
+  }
 
-  function filteredList() {
+  function getFilteredList() {
 
     switch (currentView) {
       case 'Active':
@@ -23,29 +28,41 @@ function App() {
       case 'Completed': 
         return list.filter((task) => task.isCompleted);
       case 'All':
-        return list;
+        return list.filter((task) => !task.isCompleted).concat(list.filter((task) => task.isCompleted));
     }
 
   }
 
   return (
-    <div className="App">
+    <div>
       <Title />
-      <Input 
-        list={list} 
-        updateList={updateList}
-        todoCount={todoCount}
-        updateTodoCount={updateTodoCount}
-      />
-      <CurrentList 
-        list={list}
-        filteredList={filteredList()} 
-      />
-      <ToggleViewButtons 
-        todoCount={todoCount}
-        updateCurrentView={updateCurrentView}
-        filteredList={filteredList}
-      />
+      <div className="App">
+        <Input 
+          list={list} 
+          updateList={updateList}
+          todoCount={todoCount}
+          updateTodoCount={updateTodoCount}
+
+        />
+        
+        <CurrentList 
+          list={list}
+          updateList={updateList}
+          filteredList={getFilteredList()}
+          todoCount = {todoCount}
+          updateTodoCount={updateTodoCount}
+          handleUpdateTodoCount={handleUpdateTodoCount}
+        />
+        
+        {list.length > 0 && 
+          <Footer 
+            todoCount={todoCount}
+            currentView={currentView}
+            updateCurrentView={updateCurrentView}
+          />
+        }
+
+      </div>
     </div>
   );
 }

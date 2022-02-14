@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState} from 'react';
+import {useState} from 'react';
 
 export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
     const [value, updateValue] = useState('')
@@ -9,7 +9,7 @@ export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
         updateValue(newValue);
     }
 
-    const handleUpdateTodoList = (e) => {
+    const handleUpdateList = (e) => {
         if(e.charCode === 13) {
             updateList(list.concat([
                 {
@@ -17,8 +17,8 @@ export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
                     isCompleted: false,
                 }
             ]));
-            updateTodoCount(todoCount + 1);
             updateValue('');
+            updateTodoCount(todoCount + 1);
         }
     }
 
@@ -28,7 +28,7 @@ export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
             placeholder="What needs to be done?"
             value={value}
             onChange={handleUpdateValue}
-            onKeyPress={handleUpdateTodoList}
+            onKeyPress={handleUpdateList}
         />
     );
 } 

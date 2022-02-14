@@ -1,17 +1,38 @@
-export const CurrentList = ({filteredList}) => {
+import './App.css';
+
+import {Checkbox} from './Checkbox';
+import {DeleteButton} from './DeleteButton';
+
+export const CurrentList = ({list, updateList, filteredList, todoCount, updateTodoCount, handleUpdateTodoCount}) => {
     
-    console.log(filteredList)
+    const getClassName = (task) => {
+        if (task.isCompleted) {
+            return "completedTask";
+        } else {
+            return "todoTask";
+        }
+    }
 
     return (
         <div className="currentList">
             <ul>
                 {filteredList.map((task) => {
                     return (
-                        <li key={task.name}>
+                        <li className={getClassName(task)}>
                             <div>
-                                <input className="completeTask" type="checkbox" name={task.name}></input>
+                                <Checkbox 
+                                    list={list}
+                                    task={task}
+                                    handleUpdateTodoCount={handleUpdateTodoCount}
+                                /> 
                                 <label>{task.name}</label>
-                                <button className="deleteTask"></button>
+                                <DeleteButton 
+                                    list={list}
+                                    updateList={updateList}
+                                    task={task}
+                                    todoCount={todoCount}
+                                    updateTodoCount={updateTodoCount}
+                                />
                             </div>
                         </li>
                     )
