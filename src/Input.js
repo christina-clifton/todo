@@ -12,7 +12,7 @@ export const Input = ({list, updateList, todoCount, updateTodoCount}) => {
     const handleUpdateList = (e) => {
         if(e.charCode === 13) {
             updateList(list.concat([
-                {
+                {   id: list.length + 1,
                     name: value,
                     isCompleted: false,
                 }

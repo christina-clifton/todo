@@ -9,7 +9,7 @@ import {Footer} from './Footer';
 
 function App() {
 
-  const [list, updateList] = useState([]);
+  const [list, updateList] = useState([]);     
 
   const [currentView, updateCurrentView] = useState ('All');
 
@@ -21,14 +21,16 @@ function App() {
   }
 
   function getFilteredList() {
+    const activeList = list.filter((task) => !task.isCompleted);
+    const completedList = list.filter((task) => task.isCompleted);
 
     switch (currentView) {
       case 'Active':
-        return list.filter((task) => !task.isCompleted);
+        return activeList;
       case 'Completed': 
-        return list.filter((task) => task.isCompleted);
-      case 'All':
-        return list.filter((task) => !task.isCompleted).concat(list.filter((task) => task.isCompleted));
+        return completedList;
+      default:
+        return activeList.concat(completedList);
     }
 
   }

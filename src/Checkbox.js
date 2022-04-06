@@ -1,7 +1,8 @@
 export const Checkbox = ({task, handleUpdateTodoCount}) => {
     
     const handleCompleteTask = () => {
-        task.isCompleted = true;
+        task.isCompleted = !task.isCompleted;
+        console.log(`${task.name}: ${task.isCompleted}`);
         handleUpdateTodoCount();
         //need Checkbox to stay checked when switching views
     } 

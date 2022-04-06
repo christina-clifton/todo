@@ -18,10 +18,9 @@ export const CurrentList = ({list, updateList, filteredList, todoCount, updateTo
             <ul>
                 {filteredList.map((task) => {
                     return (
-                        <li className={getClassName(task)}>
+                        <li key={task.id} className={getClassName(task)}>
                             <div>
                                 <Checkbox 
-                                    list={list}
                                     task={task}
                                     handleUpdateTodoCount={handleUpdateTodoCount}
                                 /> 
