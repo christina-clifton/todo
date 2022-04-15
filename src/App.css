@@ -66,14 +66,14 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
-.currentList ul {
+ul {
   background: white;
   margin: 0px 0 0px 0;
   position: relative;
   list-style: none;
 }
 
-.currentList li {
+li {
   margin: 0px 0px 0px -40px;
   padding: 15px 15px 15px 5px;
   display: block;
@@ -84,7 +84,7 @@ body,
   text-align: left;
 }
 
-.currentList li label {
+label {
   padding: 60px;
 }
 
@@ -118,16 +118,15 @@ body,
   background-image: url();
 }
 
-.deleteButton {
+/*.deleteButton {
   text-align: center;
   width: 40px;
-  /* auto, since non-WebKit browsers doesn't support input styling */
   height: auto;
   position: absolute;
   top: 0;
   bottom: 0;
   margin: auto 0;
-  border: none; /* Mobile Safari */
+  border: none;
   -webkit-appearance: none;
   appearance: none;
   opacity: 0;
@@ -138,6 +137,7 @@ body,
   background-repeat: no-repeat;
   background-position: center left;
 }
+*/
 
 .footer {
   width: 96%;

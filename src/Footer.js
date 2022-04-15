@@ -1,13 +1,9 @@
-export const Footer = ({todoCount, currentView, updateCurrentView}) => {
+export const Footer = ({todoCount, currentView, handleUpdateView}) => {
 
     const determineCurrentView = (buttonName) => {
         if (currentView === buttonName) {
             return 'currentView';
         } 
-    }
-
-    const handleUpdateView = (e) => {
-        updateCurrentView(e.target.className);
     }
     
     return (

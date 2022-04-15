@@ -1,66 +1,129 @@
 import React, {useState} from 'react';
 import './App.css';
 
-import {Title} from './Title';
 import {Input} from './Input';
-import {CurrentList} from './CurrentList';
+import {List} from './List';
 import {Footer} from './Footer';
 
 
 function App() {
 
-  const [list, updateList] = useState([]);     
+  /* Creates state for the app. Tracks todoList, completedTasksList, currently selected view & the number of todo tasks. */
+  
+  const [app, updateApp] = useState({
+    todoList:[],
+    completedTasksList: [],
+    currentView: 'All',
+    todoCount: 0
+  })
 
-  const [currentView, updateCurrentView] = useState ('All');
+  /* When the user enters a new task into the input bar, this function adds the task to the todoList */
 
-  const [todoCount, updateTodoCount] = useState(0);
+  function handleAddNewTask(taskName) {
 
-  function handleUpdateTodoCount() {
-    const todoList = list.filter((task) => !task.isCompleted);
-    updateTodoCount(todoList.length);
+    updateApp({
+      todoList: [
+        {   id: `Todo ${app.todoList.length + 1}`,
+          name: taskName,
+        }].concat(app.todoList),
+      completedTasksList: app.completedTasksList,
+      currentView: app.currentView,
+      todoCount: app.todoCount + 1
+    });
   }
 
-  function getFilteredList() {
-    const activeList = list.filter((task) => !task.isCompleted);
-    const completedList = list.filter((task) => task.isCompleted);
+  /* When the user clicks on the checkbox next to a todo task, the task is moved removed from the todoList & 
+  added to the completedTasksList. The todoCount is updated. */
 
-    switch (currentView) {
-      case 'Active':
-        return activeList;
-      case 'Completed': 
-        return completedList;
-      default:
-        return activeList.concat(completedList);
+  function handleCompleteTask(e) {
+
+    const taskName = e.currentTarget.taskName;
+
+    console.log(taskName);
+  
+    // updateApp({
+    //   todoList: app.todoList.filter((item) => item.name === taskName),
+    //   completedTasksList: [
+    //     {   id: `Completed ${app.completedTasksList.length + 1}`,
+    //         name: taskName,
+    //     }].concat(app.completedTasksList),
+    //   currentView: app.currentView,
+    //   todoCount: app.todoCount - 1
+    // })
+  }
+
+  /* When the user clicks on the delete button next to a todo task, the task is removed from its list (either
+    todoList or completedTasksList). If the task had been in the todoList, the todoCount is updated. */
+
+  function handleDeleteTask(e) {
+    
+    console.log('handleDelteTask function called')
+
+    const taskId = e.currentTarget.id;
+
+    console.log(taskId)
+    
+    let newTodoCount = app.todoCount;
+
+    if(app.todoList.some(item => item.id === taskId)) {
+      newTodoCount = app.todoCount - 1
     }
 
+    updateApp({
+      todoList: app.todoList.filter((item) => item.id !== taskId),
+      copletedList: app.completedTasksList.filter((item) => item.id !== taskId),
+      currentView: app.currentView,
+      todoCount: newTodoCount
+    })
   }
 
+  /* Creates the currently displayed list, depending on which view the user has selected. The default 
+  list is 'All', with the todo tasks at the top and the completed tasks at the bottom. */
+
+  function getCurrentList() {
+    switch (app.currentView) {
+      case 'Active':
+        return app.todoList;
+      case 'Completed': 
+        return app.completedTasksList;
+      default:
+        return app.todoList.concat(app.completedTasksList);
+    }
+  }
+
+  /* When the user selects a new view ('All', 'Active' or 'Completed'), the app's state is updated to reflect
+  the selected view. */
+
+  function handleUpdateView(e) {
+    updateApp({
+      todoList: app.todoList,
+      completedTasksList: app.completedTasksList,
+      currentView: e.target.className,
+      todoCount: app.todoCount
+    })
+  }
+
+  /* Renders the app. Includes the title, input bar & currentView list. If 
+  there is at least 1 active or completed task, the footer is included */
   return (
     <div>
-      <Title />
+      <header className="App-Title">todos</header>
       <div className="App">
         <Input 
-          list={list} 
-          updateList={updateList}
-          todoCount={todoCount}
-          updateTodoCount={updateTodoCount}
-
+          handleAddNewTask={handleAddNewTask}
         />
         
-        <CurrentList 
-          list={list}
-          updateList={updateList}
-          filteredList={getFilteredList()}
-          todoCount = {todoCount}
-          updateTodoCount={updateTodoCount}
-          handleUpdateTodoCount={handleUpdateTodoCount}
+        <List
+          list={getCurrentList()}
+          handleCompleteTask={handleCompleteTask}
+          handleDeleteTask={handleDeleteTask}
         />
         
-        {list.length > 0 && 
+        {app.todoList.length > 0 && 
           <Footer 
-            todoCount={todoCount}
-            currentView={currentView}
-            updateCurrentView={updateCurrentView}
+            todoCount={app.todoList.length}
+            currentView={app.currentView}
+            handleUpdateView={handleUpdateView}
           />
         }
 
