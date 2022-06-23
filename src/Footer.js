@@ -1,18 +1,13 @@
 export const Footer = ({todoCount, currentView, handleUpdateView}) => {
 
-    const determineCurrentView = (buttonName) => {
-        if (currentView === buttonName) {
-            return 'currentView';
-        } 
-    }
-    
+    /* Returns the Footer to be rendered in App.js. Footer includes the todoCount and filterButtons. */    
     return (
         <div className="footer">
-            <p id="todoCount">{todoCount} item{todoCount !== 1 ? 's' : ''} left</p>
-            <div id="filterButtons" >
-                <button className='All' id={determineCurrentView('All')} onClick={handleUpdateView}>All</button>
-                <button className='Active' id={determineCurrentView('Active')} onClick={handleUpdateView}>Active</button>
-                <button className='Completed' id={determineCurrentView('Completed')} onClick={handleUpdateView}>Completed</button>
+            <p className="todoCount">{todoCount} todo{todoCount !== 1 ? 's' : ''} left</p>
+            <div className="filterButtons" >
+                <button className='all' id={currentView === 'all' ? 'currentView' : ''} onClick={handleUpdateView}>all</button>
+                <button className='todo' id={currentView === 'todo' ? 'currentView' : ''} onClick={handleUpdateView}>todo</button>
+                <button className='done' id={currentView === 'done' ? 'currentView' : ''} onClick={handleUpdateView}>done</button>
             </div>
         </div>
     )

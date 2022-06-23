@@ -12,7 +12,7 @@ export const Input = ({handleAddNewTask}) => {
         updateValue(newValue);
     }
 
-    /* Adds a new todo task to todoList when user presses enter. Resets the input value */
+    /* Adds a new todo task to the list when user presses enter. Resets the input value */
     const handleUpdateTodoList = (e) => {
 
         if(e.charCode === 13) {
@@ -21,10 +21,11 @@ export const Input = ({handleAddNewTask}) => {
         }
     }
 
+    /* Returns the Input component to be rendered in App.js */
     return (
         <input className="NewTaskInput"
             type="text"
-            placeholder="What needs to be done?"
+            placeholder="...what's on your list?"
             value={value}
             onChange={handleUpdateValue}
             onKeyPress={handleUpdateTodoList}

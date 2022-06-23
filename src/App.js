@@ -1,110 +1,85 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-import {Input} from './Input';
-import {List} from './List';
-import {Footer} from './Footer';
-
+import { Input } from './Input';
+import { List } from './List';
+import { Footer } from './Footer';
 
 function App() {
 
-  /* Creates state for the app. Tracks todoList, completedTasksList, currently selected view & the number of todo tasks. */
-  
-  const [app, updateApp] = useState({
-    todoList:[],
-    completedTasksList: [],
-    currentView: 'All',
-    todoCount: 0
-  })
+  /* Creates states for the app. Tracks list, currently selected view & the number of todo tasks. */
+  const [list, updateList] = useState([]);
 
-  /* When the user enters a new task into the input bar, this function adds the task to the todoList */
+  const [currentView, updateCurrentView] = useState('all');
 
+  const [todoCount, updateTodoCount] = useState(0);
+
+
+  /* When the user submits a new task into the input bar, this function adds the task to the todoList 
+  and updates the todoCount. */
   function handleAddNewTask(taskName) {
+    updateList(
+      [{ 
+        id: `${taskName}: ${todoCount + 1}`,
+        name: taskName,
+        isdone: false
+      }].concat(list)
+    );
 
-    updateApp({
-      todoList: [
-        {   id: `Todo ${app.todoList.length + 1}`,
-          name: taskName,
-        }].concat(app.todoList),
-      completedTasksList: app.completedTasksList,
-      currentView: app.currentView,
-      todoCount: app.todoCount + 1
-    });
+    updateTodoCount(todoCount + 1);
   }
 
-  /* When the user clicks on the checkbox next to a todo task, the task is moved removed from the todoList & 
-  added to the completedTasksList. The todoCount is updated. */
 
-  function handleCompleteTask(e) {
+  /* When the user clicks on the checkbox next to a todo task, the task's isdone property is toggled.
+  The todoCount is updated. */
+  function handleToggleTask(task) {
+    const newList = [...list];
+    const foundIndex = newList.findIndex((item) => item.id === task.id);
+    newList[foundIndex].isdone = !task.isdone;
 
-    const taskName = e.currentTarget.taskName;
+    updateList(newList);
 
-    console.log(taskName);
-  
-    // updateApp({
-    //   todoList: app.todoList.filter((item) => item.name === taskName),
-    //   completedTasksList: [
-    //     {   id: `Completed ${app.completedTasksList.length + 1}`,
-    //         name: taskName,
-    //     }].concat(app.completedTasksList),
-    //   currentView: app.currentView,
-    //   todoCount: app.todoCount - 1
-    // })
+    updateTodoCount(newList.filter((item) => item.isdone === false).length);
   }
 
-  /* When the user clicks on the delete button next to a todo task, the task is removed from its list (either
-    todoList or completedTasksList). If the task had been in the todoList, the todoCount is updated. */
 
-  function handleDeleteTask(e) {
-    
-    console.log('handleDelteTask function called')
+  /* When the user clicks on the delete button next to a todo task, the task is removed from the list.
+  The todoCount is updated. */
+  function handleDeleteTask(task) {
+    const newList = list.filter((item) => item.id !== task.id);
 
-    const taskId = e.currentTarget.id;
+    updateList(newList);
 
-    console.log(taskId)
-    
-    let newTodoCount = app.todoCount;
-
-    if(app.todoList.some(item => item.id === taskId)) {
-      newTodoCount = app.todoCount - 1
-    }
-
-    updateApp({
-      todoList: app.todoList.filter((item) => item.id !== taskId),
-      copletedList: app.completedTasksList.filter((item) => item.id !== taskId),
-      currentView: app.currentView,
-      todoCount: newTodoCount
-    })
+    updateTodoCount(newList.filter((item) => item.isdone === false).length);
   }
 
-  /* Creates the currently displayed list, depending on which view the user has selected. The default 
-  list is 'All', with the todo tasks at the top and the completed tasks at the bottom. */
 
-  function getCurrentList() {
-    switch (app.currentView) {
-      case 'Active':
-        return app.todoList;
-      case 'Completed': 
-        return app.completedTasksList;
-      default:
-        return app.todoList.concat(app.completedTasksList);
-    }
-  }
-
-  /* When the user selects a new view ('All', 'Active' or 'Completed'), the app's state is updated to reflect
+  /* When the user selects a new view ('all', 'todo' or 'done'), the app's state is updated to reflect
   the selected view. */
-
   function handleUpdateView(e) {
-    updateApp({
-      todoList: app.todoList,
-      completedTasksList: app.completedTasksList,
-      currentView: e.target.className,
-      todoCount: app.todoCount
-    })
+    updateCurrentView(e.target.className);
   }
+
+
+  /* Creates the currently displayed list, depending on which view the user has selected ('all'[default], 'todo', 
+    'done') */
+  function getCurrentList() {
+    const todos = list.filter((item) => item.isdone === false);
+    const doneTasks = list.filter((item) => item.isdone === true);
+    
+    switch (currentView) {
+      case 'todo':
+        return todos;
+      case 'done': 
+        return doneTasks;
+      default:
+        return list;
+    }
+  }
+
 
   /* Renders the app. Includes the title, input bar & currentView list. If 
-  there is at least 1 active or completed task, the footer is included */
+  there is at least 1 todo or done task, the footer is included */
   return (
     <div>
       <header className="App-Title">todos</header>
@@ -115,14 +90,14 @@ function App() {
         
         <List
           list={getCurrentList()}
-          handleCompleteTask={handleCompleteTask}
+          handleToggleTask={handleToggleTask}
           handleDeleteTask={handleDeleteTask}
         />
         
-        {app.todoList.length > 0 && 
+        {list.length > 0 && 
           <Footer 
-            todoCount={app.todoList.length}
-            currentView={app.currentView}
+            todoCount={todoCount}
+            currentView={currentView}
             handleUpdateView={handleUpdateView}
           />
         }
