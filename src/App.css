@@ -45,12 +45,12 @@ body,
   border: 1px solid #455E54;
 }
 
-.NewTaskInput {
+.NewListItemInput {
   border: 0.1px solid #FCE6E3;
   border-bottom: 0.5px solid #455E54;
 }
 
-.NewTaskInput,
+.NewListItemInput,
 .edit {
   position: relative;
   background: white;
@@ -64,7 +64,7 @@ body,
   color: inherit;
 }
 
-ul {
+.list ul {
   background: white;
   margin: 0px;
   padding: 0px;
@@ -72,7 +72,7 @@ ul {
   list-style: none;
 }
 
-li {
+.listItem li {
   display: flex;
   flex-direction: row;
   justify-content:space-between;
@@ -87,21 +87,25 @@ li {
   border: 0.5px solid #FCE6E3;
 }
 
-.checkbox-wrapper {
+.list .checkbox-wrapper {
   display: flex;
 }
 
-label {
+.list label {
   padding-left: 20px;
 }
 
-.doneTask {
+.listItem .listItemName {
+  padding-left: 20px;
+}
+
+.list .done {
   text-decoration: line-through;
   color: #e6e6e6;
   transition: color 0.3s ease-in, text-decoration 0.3s ease-in;
 }
 
-.checkbox {
+.list .checkbox {
   display: flex;
   width: 30px;
   height: 30px;
@@ -114,12 +118,12 @@ label {
   cursor: pointer;
 }
 
-.checkbox .icon {
+.list .checkbox .icon {
   width: 25px;
   height: 25px;
 }
 
-.deleteButton {
+.list .deleteButton {
   display: flex;
   width: 30px;
   height: 30px;
@@ -130,14 +134,14 @@ label {
   margin-right: 20px;
 }
 
-.deleteButton .icon {
+.list .deleteButton .icon {
   width: 15px;
   height: 15px;
   opacity: 0;
   transition: opacity 0.1s ease-out;
 }
 
-.listItem:hover .deleteButton .icon {
+.list .listItem:hover .deleteButton .icon {
   opacity: 1;
   transition: opacity 0.1s ease-in;
   cursor: pointer;
@@ -154,20 +158,20 @@ label {
   border-top: 0.5px solid #455E54;
 }
 
-.todoCount {
+.footer .todoCount {
   float: left;
   margin: 15px;
   color: #A12F1B;
 }
 
-.filterButtons {
+.footer .filterButtons {
   position: absolute;
   left: 0px;
   right: 0px;
   margin-top: 10px;
 }
 
-.all, .todo, .done {
+.footer .all, .todo, .done {
   background-color: white;
   color: #A12F1B;
   margin: 3px;
@@ -178,11 +182,11 @@ label {
   transition: border 0.2s ease-out;
 }
 
-.all:hover, .todo:hover, .done:hover {
+.footer .all:hover, .todo:hover, .done:hover {
   border: 1px solid #455E54;
   transition: border 0.3s ease-in;
 }
 
-#currentView {
+.footer #currentView {
   border-color: #455E54;
 }
