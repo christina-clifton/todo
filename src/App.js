@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+//stylesheet
 import './App.css';
 
-function App() {
+//dependencies
+import React, { useState } from 'react';
+
+const App = () => {
 
   /* Creates states for the app. Tracks input value, list items, currently selected view & the number of todos. */
   const [newTodoValue, updateNewTodoValue] = useState('');     /* Creates a state for input value. */
   
   const [list, updateList] = useState([]);     /* Creates a state for all list items - todo and done. */
 
-  const [currentView, updateCurrentView] = useState('all');     /* Creates a state for the current view of the app - all, todo & done. */
+  const [currentView, updateCurrentView] = useState('all-filter');     /* Creates a state for the current view of the app - all, todo & done. */
 
   const [todoCount, updateTodoCount] = useState(0);     /* Creates a state for the number of current todos - excludes done. */  
 
@@ -16,7 +19,7 @@ function App() {
   const handleUpdateInputValue = (e) => {
     const newValue = e.target.value;
     
-    if (e.target.className === 'NewListItemInput') {
+    if (e.target.id === 'add-todo') {
       updateNewTodoValue(newValue);
     } else {
       const newList = [...list];
@@ -44,7 +47,6 @@ function App() {
     }
   }
 
-
   /* When the user clicks on the checkbox next to a list item, the item's isdone property is toggled.
   The todoCount is updated. */
   const handleToggleListItem = (listItem) => {
@@ -57,7 +59,6 @@ function App() {
     updateTodoCount(newList.filter((item) => item.isdone === false).length);
   }
 
-
   /* When the user clicks on the delete button next to a todo item, the item is removed from the list.
   The todoCount is updated. */
   const handleDeleteListItem = (listItem) => {
@@ -68,39 +69,35 @@ function App() {
     updateTodoCount(newList.filter((item) => item.isdone === false).length);
   }
 
-
   /* When the user selects a new view ('all', 'todo' or 'done'), the app's state is updated to reflect
   the selected view. */
   const handleUpdateView = (e) => {
     updateCurrentView(e.target.className);
   }
 
-
   /* Creates the currently displayed list, depending on which view the user has selected ('all'[default], 'todo', 
     'done') */
   const getCurrentList = () => {
-    const todos = list.filter((item) => item.isdone === false);
-    const dones = list.filter((item) => item.isdone === true);
-    
     switch (currentView) {
-      case 'todo':
-        return todos;
-      case 'done': 
-        return dones;
+      case 'todo-filter':
+        return list.filter((item) => item.isdone === false);
+      case 'done-filter': 
+        return list.filter((item) => item.isdone === true);
       default:
         return list;
     }
   }
 
-
   /* Renders the app. Includes the title, input bar & currentView list. If 
   there is at least 1 list item, the footer is included */
   return (
-    <div>
-      <header className="App-Title">todos</header>
-      <div className="App">
-        <input className="NewListItemInput"
+    <section aria-label='todo app' className='todos'>
+      <header><h1>todos</h1></header>      
+      <main className="app">
+        <input 
+          id='add-todo'
           type="text"
+          aria-label='add todo'
           placeholder="...what's on your list?"
           value={newTodoValue}
           onChange={handleUpdateInputValue}
@@ -110,27 +107,30 @@ function App() {
         <div className="list">
           <ul>
             {getCurrentList().map((listItem) => (
-              <li key={listItem.id} className='listItem'>
+              <li key={listItem.id} className='list-item'>
               <div className='checkbox-wrapper'>
-                <button className='checkbox' onClick={() => handleToggleListItem(listItem)}>
+                <button className='checkbox' onClick={() => handleToggleListItem(listItem)} value={listItem.isDone}>
                   {listItem.isdone && <img
                     className='icon'
                     src={require('../src/images/checkmark.png')}
                     alt='checkbox status'
                   />}
                 </button>
-                <input className={listItem.isdone ? "done" : "todo"}
+                <input 
+                  className={listItem.isdone ? "done" : "todo"}
                   type="text"
                   value={listItem.name}
+                  aria-label={listItem.name}
                   onChange={handleUpdateInputValue}
                   id={listItem.id}
                 />
               </div>
-              <button id={listItem.id} className='deleteButton' onClick={() => handleDeleteListItem(listItem)}>
-                  <img className='icon'
+              <button id={listItem.id} className='delete-button' onClick={() => handleDeleteListItem(listItem)}>
+                <img 
+                  className='icon'
                   src={require('../src/images/delete.png')}
                   alt='delete'
-                  />
+                />
               </button>
             </li>
             ))}
@@ -138,17 +138,17 @@ function App() {
         </div>
         
         {list.length > 0 && 
-          <div className="footer">
+          <footer>
             <p className="todoCount">{todoCount} todo{todoCount !== 1 ? 's' : ''} left</p>
-            <div className="filterButtons" >
-                <button className='all' id={currentView === 'all' ? 'currentView' : ''} onClick={handleUpdateView}>all</button>
-                <button className='todo' id={currentView === 'todo' ? 'currentView' : ''} onClick={handleUpdateView}>todo</button>
-                <button className='done' id={currentView === 'done' ? 'currentView' : ''} onClick={handleUpdateView}>done</button>
+            <div className="filter-buttons" >
+              <button className='all-filter' id={currentView === 'all-filter' ? 'currentView' : ''} onClick={handleUpdateView}>all</button>
+              <button className='todo-filter' id={currentView === 'todo-filter' ? 'currentView' : ''} onClick={handleUpdateView}>todo</button>
+              <button className='done-filter' id={currentView === 'done-filter' ? 'currentView' : ''} onClick={handleUpdateView}>done</button>
             </div>
-          </div>
+          </footer>
         }
-      </div>
-    </div>
+      </main>
+    </section>
   )
 }
 
